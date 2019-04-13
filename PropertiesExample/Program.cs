@@ -59,17 +59,41 @@ namespace PropertiesExample
         public class PersonWithValidation
         {
             // @전민기: seeter에 null이나 빈문자열이 들어왔을 때 ArgumentException을 던지는 Property 구현
+            
+            public string FirstName
+            {
+                
+                get => FirstName;
+                set
+                {
+                    if(string.IsNullOrWhiteSpace(value))
+                    {
+                        throw new ArgumentException("First name must not be blak");
+                        firstName = value;
+                    }
+                }
+            }
+            private string firstName;
         }
 
         public class PersonWithValidationUsingExpressBodiedMember
         {
             // @전민기: seeter에 null이나 빈문자열이 들어왔을 때 ArgumentException을 던지는 Property 구현
             // PersonWitValidation 클래스와 동일한 FirstName Property를 ExpressionBodiedMember를 사용해 구현해 볼 것
+            private string firstName;
+            public string FirstName
+            {
+                get => FirstName;
+                set => FirstName = (!string.IsNullOrWhiteSpace(value)) ? 
+                value : throw new ArgumentException("First name must not be blank");
+            }
+            
         }
 
         public class PersonContainsReadOnlyProperty
         {
             // @전민기: ReadOnly property 구현
+            public string FirstName { get; private set; }
         }
 
         public class PersonContainsGetterOnly
@@ -96,17 +120,35 @@ namespace PropertiesExample
         public class PersonWithComputedProperty
         {
             // @전민기: 예제 구현 할 것
+            public string FirstName { get; set; }
+            public string LastName { get; set; }
+            public string FullName { get { return $"{FirstName} {LastName}"; } }
         }
 
         public class PersonWithComputedPropertyUsingExpressionBodiedMember
         {
             // @전민기: 예제 구현 할 것
+            public string FirstName { get; set; }
+            public string LastName { get; set; }
+            public string FullName => $"{FirstName} {LastName}";
         }
 
         public class PersonWithCachedEvaluatedProperty
         {
             // @전민기: 예제 구현할 것
             // 만약 기존에 호출된 적이 없으면 새로 값을 생성하고 기존에 Cached된 값이 있으면 그 값을 사용함.
+            public string FirstName { get; set; }
+            public string LastName { get; set; }
+            private string fullName;
+            public string FullName
+            {
+                get
+                {
+                    if (fullName == null)
+                        fullName = $"{FirstName} {LastName}";
+                    return fullName;
+                }
+            }
         }
 
         public class PersonWithCachedEvaluatedProperty2
@@ -114,6 +156,41 @@ namespace PropertiesExample
             // @전민기: 예제 구현할 것
             // PersonWithCachedEvaluatedProperty 는 버그가 있음.
             // 어떤 버그가 있는지 예제 문서 확인하고 버그 없는 코드 구현
+
+            //first 및 last 업데이트(set)가 되면 fullname은 null이 아니라서  업데이트(get 안에있는 if)가 안됨
+            //first 및 last 업데이트(set)fullname을 널로 바꾸고 fullname업데이트(get 안에 있는 if문)이 되게 해야함
+            private string firstName;
+            public string FirstName
+            {
+                get => firstName;
+                set
+                {
+                    firstName = value;
+                    fullName = null;
+                }
+            }
+
+            private string lastName;
+            public string LastName
+            {
+                get => lastName;
+                set
+                {
+                    lastName = value;
+                    fullName = null;
+                }
+            }
+
+            private string fullName;
+            public string FullName
+            {
+                get
+                {
+                    if (fullName == null)
+                        fullName = $"{FirstName} {LastName}";
+                    return fullName;
+                }
+            }
         }
 
         public class PersonWithAttachingAttribute
@@ -122,13 +199,39 @@ namespace PropertiesExample
             // C# 7.3에 추가된 기능.
             // 최신 기능이라 나도 잘 모름.
             // 예제 문서 확인하고 설명할 것.
+
+            //속성이 아닌 필드에서만 사용 / 컴파일러 제네레이티드 배킹 필드 이게 뭐임?
+            public string FirstName { get; set; }
+            public string LastName { get; set; }
+            [field:NonSerialized]
+            public int Id { get; set; }
+            public string FullName => $"{FirstName} {LastName}";
         }
 
         public class Person : INotifyPropertyChanged
         {
+
             // @전민기: 예제 구현할 것.
             // INotifyPropertyChanged 인터페이스는 나중에 배울 것임.
             // INotifyPropertyChanged 빨간 줄(명칭:squiggle) 생긴 부분에서 ctrl + . 을 누르면 인터페이스 구현 자동으로 추가 할 수 있음.
+            public event PropertyChangedEventHandler PropertyChanged;
+
+            public string FirstName
+            {
+                get => FirstName;
+                set
+                {
+                    if(string.IsNullOrWhiteSpace(value))
+                    {
+                        throw new ArgumentException("first name must not be blank");
+                    }
+                    if(value != firstName)
+                    {
+                        PropertyChanged?.Invoke(this,new PropertyChangedEventArgs(nameof(FirstName)));
+                    }
+                }
+            }
+            private string firstName;
         }
     }
 }
