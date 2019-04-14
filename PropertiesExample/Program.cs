@@ -68,9 +68,9 @@ namespace PropertiesExample
                 {
                     if(string.IsNullOrWhiteSpace(value))
                     {
-                        throw new ArgumentException("First name must not be blak");
-                        firstName = value;
+                        throw new ArgumentException("First name must not be blank");
                     }
+                    firstName = value;
                 }
             }
             private string firstName;

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace GenericTypeParametes
+namespace GenericTypeParameters
 {
     public class GenericList<T>
     {

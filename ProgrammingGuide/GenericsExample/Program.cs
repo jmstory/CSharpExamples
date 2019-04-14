@@ -2,12 +2,11 @@
 
   
 
-namespace GenericExamples
+namespace GenericsExample
 {
  
     class Program
     {
-        
         public class GenericList<T>
         {
             public void Add(T input ){}
