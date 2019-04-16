@@ -22,6 +22,10 @@ namespace Anonymous_Function
 
             //C# 3.0 딜리게이트 초기화와 같이 람다표현 , 이 람다또한 문자열 파라미터를 가진다
             //(x). The type of x is inferred by the compiler. << 이게 무슨말임?
+            // @전민기: testDelB 에서 delegate(string s)... 이라고 사용한 것 처럼 
+            // 타입(string)을 명시적으로 지정해 주지 않아도 
+            // lambda expression을 쓸 때 Compiler가 알아서 x 는 string 타입이라고 
+            // 추론할 수 있기 때문에 더 간단하게 표현 할 수 있다는 말.
             TestDelegate testDelC = (x) => {Console.WriteLine(x);};
 
             //딜리게이트 호출?
