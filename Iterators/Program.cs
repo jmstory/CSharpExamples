@@ -5,45 +5,82 @@ namespace Iterators
 {
     class Program
     {
+        
         static void Main(string[] args)
         {
-
-            // foreach(var item in collection)
-            // {
-            //     Console.WriteLine(item.ToString());
-            // }
+            List<int> collection = new List<int>();
+            collection.Add(1);
+            collection.Add(2);
+            collection.Add(3);
+            foreach(var item in collection)
+            {
+                Console.WriteLine(item.ToString());
+            }
 
             //Deeper Dive into foreach
             
-            // IEnumerator<int> enumerator = collection.GetEnumerator();
-            // while (enumerator.MoveNext())
-            // {
-            //     var item = enumerator.Current;
-            //     Console.WriteLine(item.ToString());
-            // }
+            IEnumerator<int> enumerator = collection.GetEnumerator();
+            while (enumerator.MoveNext())
+            {
+                var item = enumerator.Current;
+                Console.WriteLine(item.ToString());
+            }
 
             // C#버전 1 ~ 4
-            // IEnumerator<int> enumerator = collection.GetEnumerator();
-            // int item = default(int);
-            // while (enumerator.MoveNext())
-            // {
-            //     item = enumerator.Current;
-            //     Console.WriteLine(item.ToString());
-            // }
-            
-            // var enumerator = collection.GetEnumerator();
-            // try
-            // {
-            //     while (enumerator.MoveNext())
-            //     {
-            //         var item = enumerator.Current;
-            //         Console.WriteLine(item.ToString());
-            //     }
-            // } finall
-            // {
-            //     //(enumerator as IDisposable)?.Dispose();
-            // }
 
+            //1
+            IEnumerator<int> enumerator1 = collection.GetEnumerator();
+            int item1 = default(int);
+            while (enumerator1.MoveNext())
+            {
+                item1 = enumerator1.Current;
+                Console.WriteLine(item1.ToString());
+            }
+            
+            //2
+            var enumerator2 = collection.GetEnumerator();
+            try
+            {
+                while (enumerator2.MoveNext())
+                {
+                    var item = enumerator2.Current;
+                    Console.WriteLine(item.ToString());
+                }
+            } 
+            finally
+            {
+                //(enumerator as IDisposable)?.Dispose();
+            }
+
+            //3
+            var enumerator3 = collection.GetEnumerator();
+            try
+            {
+                while (enumerator3.MoveNext())
+                {
+                    var item = enumerator3.Current;
+                    Console.WriteLine(item.ToString());
+                }
+            } 
+            finally
+            {
+                (enumerator as IDisposable)?.Dispose();
+            }
+
+            //4
+            var enumerator4 = collection.GetEnumerator();
+            try
+            {
+                while (enumerator4.MoveNext())
+                {
+                    var item = enumerator4.Current;
+                    Console.WriteLine(item.ToString());
+                }
+            } 
+            finally
+            {
+                ((IDisposable)enumerator).Dispose();
+            }
         }
 
         // public IEnumerable<int> GetSingleDigitNumbers()
